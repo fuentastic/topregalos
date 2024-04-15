@@ -75,67 +75,138 @@ class CustomerControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(201);
     }
 
-    // update will need an existing uuid, so disable for now
-    // public function testFailUpdatePrivateCustomer()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('PUT', '/private-customer/1', [], [], ['CONTENT_TYPE' => 'application/json'],
-    //         json_encode([
-    //             'firstname' => 'UpdatedJohn',
-    //             'lastname' => 'UpdatedDoe',
-    //             'locale' => 'en_US',
-    //             'privileges' => 'full',
-    //             'department' => 'marketing'
-    //         ]));
-    //
-    //     $this->assertResponseIsUnprocessable();
-    //     $this->assertResponseStatusCodeSame(400);
-    // }
-    //
-    // public function testUpdatePrivateCustomer()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('PUT', '/private-customer/1', [], [], ['CONTENT_TYPE' => 'application/json'],
-    //         json_encode([
-    //             'firstname' => 'UpdatedJohn',
-    //             'lastname' => 'UpdatedDoe',
-    //             'locale' => 'en_US'
-    //         ]));
-    //
-    //     $this->assertResponseIsSuccessful();
-    //     $this->assertResponseStatusCodeSame(200);
-    // }
-    //
-    // public function testFailUpdateBusinessCustomer()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('PUT', '/business-customer/1', [], [], ['CONTENT_TYPE' => 'application/json'],
-    //         json_encode([
-    //             'firstname' => 'UpdatedJane',
-    //             'lastname' => 'UpdatedSmith',
-    //             'locale' => 'en_US',
-    //             'privileges' => 'god',
-    //             'department' => 'marketing'
-    //         ]));
-    //
-    //     $this->assertResponseIsUnprocessable();
-    //     $this->assertResponseStatusCodeSame(400);
-    // }
-    //
-    // public function testUpdateBusinessCustomer()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('PUT', '/business-customer/1', [], [], ['CONTENT_TYPE' => 'application/json'],
-    //         json_encode([
-    //             'firstname' => 'UpdatedJane',
-    //             'lastname' => 'UpdatedSmith',
-    //             'locale' => 'en_US',
-    //             'privileges' => 'full',
-    //             'department' => 'marketing'
-    //         ]));
-    //
-    //     $this->assertResponseIsSuccessful();
-    //     $this->assertResponseStatusCodeSame(200);
-    // }
+    public function testGetRandomPrivateCustomer()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/get-random-private-customer');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJson($client->getResponse()->getContent());
+    }
+
+    public function testGetRandomBusinessCustomer()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/get-random-business-customer');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJson($client->getResponse()->getContent());
+    }
+
+  public function testFailUpdatePrivateCustomer()
+  {
+      $client = static::createClient();
+      $client->request('GET', '/get-random-private-customer');
+      $response = $client->getResponse();
+      $customerData = json_decode($response->getContent(), true);
+
+      $customerId = $customerData['id'];
+      $updateUrl = '/private-customer/' . $customerId;
+
+      $client->request(
+          'PUT',
+          $updateUrl,
+          [],
+          [],
+          ['CONTENT_TYPE' => 'application/json'],
+          json_encode([
+              'firstname' => 'UpdatedJohn',
+              'lastname' => 'UpdatedDoe',
+              'locale' => 'en_US',
+              'privileges' => 'full',
+              'department' => 'marketing'
+          ])
+      );
+
+      $this->assertResponseIsUnprocessable();
+      $this->assertResponseStatusCodeSame(400);
+  }
+
+  public function testUpdatePrivateCustomer()
+  {
+      $client = static::createClient();
+      $client->request('GET', '/get-random-private-customer');
+      $response = $client->getResponse();
+      $customerData = json_decode($response->getContent(), true);
+
+      $customerId = $customerData['id'];
+      $updateUrl = '/private-customer/' . $customerId;
+
+      $client->request(
+          'PUT',
+          $updateUrl,
+          [],
+          [],
+          ['CONTENT_TYPE' => 'application/json'],
+          json_encode([
+              'firstname' => 'UpdatedJohn',
+              'lastname' => 'UpdatedDoe',
+              'locale' => 'en_US'
+          ])
+      );
+
+      $this->assertResponseIsSuccessful();
+      $this->assertResponseStatusCodeSame(200);
+  }
+
+  public function testFailUpdateBusinessCustomer()
+  {
+      $client = static::createClient();
+      $client->request('GET', '/get-random-business-customer');
+      $response = $client->getResponse();
+      $customerData = json_decode($response->getContent(), true);
+
+      $customerId = $customerData['id'];
+      $updateUrl = '/business-customer/' . $customerId;
+
+      $client->request(
+          'PUT',
+          $updateUrl,
+          [],
+          [],
+          ['CONTENT_TYPE' => 'application/json'],
+          json_encode([
+              'firstname' => 'UpdatedJane',
+              'lastname' => 'UpdatedSmith',
+              'locale' => 'en_US',
+              'privileges' => 'god',
+              'department' => 'marketing'
+          ])
+      );
+
+      $this->assertResponseIsUnprocessable();
+      $this->assertResponseStatusCodeSame(400);
+  }
+
+  public function testUpdateBusinessCustomer()
+  {
+      $client = static::createClient();
+      $client->request('GET', '/get-random-business-customer');
+      $response = $client->getResponse();
+      $customerData = json_decode($response->getContent(), true);
+
+      $customerId = $customerData['id'];
+      $updateUrl = '/business-customer/' . $customerId;
+
+      $client->request(
+          'PUT',
+          $updateUrl,
+          [],
+          [],
+          ['CONTENT_TYPE' => 'application/json'],
+          json_encode([
+              'firstname' => 'UpdatedJane',
+              'lastname' => 'UpdatedSmith',
+              'locale' => 'en_US',
+              'privileges' => 'full',
+              'department' => 'marketing'
+          ])
+      );
+
+      $this->assertResponseIsSuccessful();
+      $this->assertResponseStatusCodeSame(200);
+  }
 }
 

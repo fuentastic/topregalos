@@ -13,6 +13,34 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CustomerController extends AbstractController
 {
 
+   /**
+     * @Route("/get-random-private-customer", methods={"GET"})
+     */
+    public function getRandomPrivateCustomer(EntityManagerInterface $entityManager): Response
+    {
+        $randomPrivateCustomer = $entityManager->getRepository(Customer::class)->findOneBy(['type' => 'private'], ['id' => 'ASC']);
+
+        if (!$randomPrivateCustomer) {
+            return new Response('No private customer found', Response::HTTP_NOT_FOUND);
+        }
+
+        return new Response($randomPrivateCustomer);
+    }
+
+    /**
+     * @Route("/get-random-business-customer", methods={"GET"})
+     */
+    public function getRandomBusinessCustomer(EntityManagerInterface $entityManager): Response
+    {
+        $randomBusinessCustomer = $entityManager->getRepository(Customer::class)->findOneBy(['type' => 'business'], ['id' => 'ASC']);
+
+        if (!$randomBusinessCustomer) {
+            return new Response('No business customer found', Response::HTTP_NOT_FOUND);
+        }
+
+        return new Response($randomBusinessCustomer);
+    }
+
     /**
      * @Route("/private-customer", methods={"POST"})
      */
