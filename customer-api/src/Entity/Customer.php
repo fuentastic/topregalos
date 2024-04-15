@@ -3,6 +3,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity()
@@ -10,12 +11,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Customer
 {
+
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="doctrine.uuid_generator") // Specify the generator
      */
     private $id;
+
 
     /**
      * @ORM\Column(type="string", length=10)
@@ -71,10 +75,16 @@ class Customer
      */
     private $updatedAt;
 
-    public function getId(): ?int
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
+
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
+
 
     public function getType(): ?string
     {
