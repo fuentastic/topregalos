@@ -37,6 +37,7 @@ docker-compose exec db psql -U user -d symfony -c "SELECT * FROM customers;"
 ### Future Improvements
 
 - I added a very basic documentation and swagger implementation -> this should be improved
+- Since i opted for UUID i had to add a `/get-random-[CUSTOMER]` endpoint, the test suite should add, then update the same user for normalcy
 - I got away from making different Interfaces/Validators for private/business with :
 
 ```php
