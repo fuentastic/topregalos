@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
+      - .:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - php-fpm
+    networks:
+      - topgeschenken
+
+  php-fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+    networks:
+      - topgeschenken
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: symfony
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - topgeschenken
+
+networks:
+  topgeschenken:
+    driver: bridge
