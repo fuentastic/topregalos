@@ -46,3 +46,9 @@ You get two strings. You "type" the first string letter by letter, but instead o
 create the second string this way? The result should be shown on the screen.
 Note: You can press a maximum of the number of keys equal to the length of the first string
 ```
+
+## Reaction
+
+First of all -> if I would have given my go ahead to this ticket i give myself points for being very unclear :D
+
+[Code review](https://github.com/fuentastic/topregalos/pull/1#pullrequestreview-2002173861)
