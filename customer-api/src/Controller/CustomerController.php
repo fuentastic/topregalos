@@ -17,6 +17,24 @@ use OpenApi\Annotations as OA;  // Ensure this is also imported if not already
 class CustomerController extends AbstractController
 {
 
+    private function getBusinessContent(Request $request) {
+        $dataString = $request->getContent();
+        $originalData = json_decode($dataString, true);
+
+        // Create a new array with 'type' as the first key
+        $data = ['type' => 'business'];
+
+        // Copy other elements from the original array to the new array
+        foreach ($originalData as $key => $value) {
+            // Skip 'type' to avoid overwriting it if it's already set in original data
+            if ($key !== 'type') {
+                $data[$key] = $value;
+            }
+        }
+
+        return json_encode($data);
+    }
+
    /**
      * Retrieves a random private customer from the database.
      *
@@ -186,24 +204,6 @@ class CustomerController extends AbstractController
         } catch (\Exception $e) {
             return new Response('Error processing request: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-    }
-
-    private function getBusinessContent(Request $request) {
-        $dataString = $request->getContent();
-        $originalData = json_decode($dataString, true);
-
-        // Create a new array with 'type' as the first key
-        $data = ['type' => 'business'];
-
-        // Copy other elements from the original array to the new array
-        foreach ($originalData as $key => $value) {
-            // Skip 'type' to avoid overwriting it if it's already set in original data
-            if ($key !== 'type') {
-                $data[$key] = $value;
-            }
-        }
-
-        return json_encode($data);
     }
 
     /**
