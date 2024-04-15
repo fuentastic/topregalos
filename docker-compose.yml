@@ -37,6 +37,17 @@ services:
     networks:
       - topgeschenken
 
+  test_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: symfony_test
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    # ports:
+    #   - "5433:5432"
+    networks:
+      - topgeschenken
+
 networks:
   topgeschenken:
     driver: bridge
