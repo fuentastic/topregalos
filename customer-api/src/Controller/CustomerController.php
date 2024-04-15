@@ -10,11 +10,30 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use Nelmio\ApiDocBundle\Annotation\Model;  // Import the Model annotation
+use OpenApi\Annotations as OA;  // Ensure this is also imported if not already
+
+
 class CustomerController extends AbstractController
 {
 
    /**
+     * Retrieves a random private customer from the database.
+     *
      * @Route("/get-random-private-customer", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a random private customer",
+     *     @OA\JsonContent(
+     *         type="object",
+     *         ref=@Model(type=Customer::class)
+     *     )
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="No private customer found"
+     * )
+     * @OA\Tag(name="Customer")
      */
     public function getRandomPrivateCustomer(EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
     {
@@ -28,7 +47,22 @@ class CustomerController extends AbstractController
     }
 
     /**
+     * Retrieves a random business customer from the database.
+     *
      * @Route("/get-random-business-customer", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a random business customer",
+     *     @OA\JsonContent(
+     *         type="object",
+     *         ref=@Model(type=Customer::class)
+     *     )
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="No business customer found"
+     * )
+     * @OA\Tag(name="Customer")
      */
     public function getRandomBusinessCustomer(EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
     {
@@ -42,7 +76,29 @@ class CustomerController extends AbstractController
     }
 
     /**
+     * Creates a private customer with the provided JSON data.
+     *
      * @Route("/private-customer", methods={"POST"})
+     * @OA\RequestBody(
+     *     description="JSON payload",
+     *     required=true,
+     *     @OA\JsonContent(
+     *         ref=@Model(type=Customer::class)
+     *     )
+     * )
+     * @OA\Response(
+     *     response=201,
+     *     description="Customer created successfully"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad request, validation errors",
+     *     @OA\JsonContent(
+     *         type="string",
+     *         example="Validation errors string"
+     *     )
+     * )
+     * @OA\Tag(name="Customer")
      */
     public function createPrivateCustomer(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
     {
@@ -69,7 +125,40 @@ class CustomerController extends AbstractController
     }
 
     /**
+     * Updates an existing private customer with the provided JSON data.
+     *
      * @Route("/private-customer/{id}", methods={"PUT"})
+     * @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     required=true,
+     *     description="The ID of the private customer to update",
+     *     @OA\Schema(type="integer")
+     * )
+     * @OA\RequestBody(
+     *     description="JSON payload",
+     *     required=true,
+     *     @OA\JsonContent(
+     *         ref=@Model(type=Customer::class)
+     *     )
+     * )
+     * @OA\Response(
+     *     response=200,
+     *     description="Customer updated successfully"
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="Customer not found"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad request, validation errors",
+     *     @OA\JsonContent(
+     *         type="string",
+     *         example="Validation errors string"
+     *     )
+     * )
+     * @OA\Tag(name="Customer")
      */
     public function updatePrivateCustomer(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, $id): Response
     {
@@ -118,7 +207,29 @@ class CustomerController extends AbstractController
     }
 
     /**
+     * Creates a business customer with the provided JSON data.
+     *
      * @Route("/business-customer", methods={"POST"})
+     * @OA\RequestBody(
+     *     description="JSON payload",
+     *     required=true,
+     *     @OA\JsonContent(
+     *         ref=@Model(type=Customer::class)
+     *     )
+     * )
+     * @OA\Response(
+     *     response=201,
+     *     description="Business customer created successfully"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad request, validation errors",
+     *     @OA\JsonContent(
+     *         type="string",
+     *         example="Validation errors string"
+     *     )
+     * )
+     * @OA\Tag(name="Customer")
      */
     public function createBusinessCustomer(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
     {
@@ -145,7 +256,40 @@ class CustomerController extends AbstractController
     }
 
     /**
+     * Updates an existing business customer with the provided JSON data.
+     *
      * @Route("/business-customer/{id}", methods={"PUT"})
+     * @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     required=true,
+     *     description="The ID of the business customer to update",
+     *     @OA\Schema(type="integer")
+     * )
+     * @OA\RequestBody(
+     *     description="JSON payload for updating a business customer, including privileges and department",
+     *     required=true,
+     *     @OA\JsonContent(
+     *         ref=@Model(type=Customer::class)
+     *     )
+     * )
+     * @OA\Response(
+     *     response=200,
+     *     description="Business customer updated successfully"
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="Customer not found"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad request, validation errors",
+     *     @OA\JsonContent(
+     *         type="string",
+     *         example="Validation errors string"
+     *     )
+     * )
+     * @OA\Tag(name="Customer")
      */
     public function updateBusinessCustomer(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, $id): Response
     {

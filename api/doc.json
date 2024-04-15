@@ -1,0 +1,342 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Customer api",
+    "description": "Top Regalitos Assesment Api",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/get-random-private-customer": {
+      "get": {
+        "tags": ["Customer"],
+        "summary": "Retrieves a random private customer from the database.",
+        "operationId": "get_app_customer_getrandomprivatecustomer",
+        "responses": {
+          "200": {
+            "description": "Returns a random private customer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No private customer found"
+          }
+        }
+      }
+    },
+    "/get-random-business-customer": {
+      "get": {
+        "tags": ["Customer"],
+        "summary": "Retrieves a random business customer from the database.",
+        "operationId": "get_app_customer_getrandombusinesscustomer",
+        "responses": {
+          "200": {
+            "description": "Returns a random business customer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No business customer found"
+          }
+        }
+      }
+    },
+    "/private-customer": {
+      "post": {
+        "tags": ["Customer"],
+        "summary": "Creates a private customer with the provided JSON data.",
+        "operationId": "post_app_customer_createprivatecustomer",
+        "requestBody": {
+          "description": "JSON payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Customer created successfully"
+          },
+          "400": {
+            "description": "Bad request, validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Validation errors string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private-customer/{id}": {
+      "put": {
+        "tags": ["Customer"],
+        "summary": "Updates an existing private customer with the provided JSON data.",
+        "operationId": "put_app_customer_updateprivatecustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the private customer to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Customer updated successfully"
+          },
+          "404": {
+            "description": "Customer not found"
+          },
+          "400": {
+            "description": "Bad request, validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Validation errors string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-customer": {
+      "post": {
+        "tags": ["Customer"],
+        "summary": "Creates a business customer with the provided JSON data.",
+        "operationId": "post_app_customer_createbusinesscustomer",
+        "requestBody": {
+          "description": "JSON payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Business customer created successfully"
+          },
+          "400": {
+            "description": "Bad request, validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Validation errors string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-customer/{id}": {
+      "put": {
+        "tags": ["Customer"],
+        "summary": "Updates an existing business customer with the provided JSON data.",
+        "operationId": "put_app_customer_updatebusinesscustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the business customer to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON payload for updating a business customer, including privileges and department",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Customer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Business customer updated successfully"
+          },
+          "404": {
+            "description": "Customer not found"
+          },
+          "400": {
+            "description": "Bad request, validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Validation errors string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/string-manipulate": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "options": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "head": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "trace": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Customer": {
+        "required": [
+          "type",
+          "email",
+          "firstname",
+          "lastname",
+          "locale",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Uuid"
+              }
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["private", "business"]
+          },
+          "email": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "middlename": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "privileges": {
+            "type": "string",
+            "enum": ["basic", "advanced", "full"],
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "locale": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "type": "object"
+      },
+      "Uuid": {
+        "type": "object"
+      }
+    }
+  }
+}
