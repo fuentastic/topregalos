@@ -19,7 +19,6 @@ class CustomerControllerTest extends WebTestCase
                 'department' => 'sales'
             ]));
 
-        $this->assertResponseIsUnprocessable();
         $this->assertResponseStatusCodeSame(400);
     }
 
@@ -53,8 +52,7 @@ class CustomerControllerTest extends WebTestCase
                 'department' => 'sales'
             ]));
 
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseStatusCodeSame(400);
     }
 
     // Test create business customer
@@ -120,7 +118,6 @@ class CustomerControllerTest extends WebTestCase
           ])
       );
 
-      $this->assertResponseIsUnprocessable();
       $this->assertResponseStatusCodeSame(400);
   }
 
@@ -176,7 +173,6 @@ class CustomerControllerTest extends WebTestCase
           ])
       );
 
-      $this->assertResponseIsUnprocessable();
       $this->assertResponseStatusCodeSame(400);
   }
 

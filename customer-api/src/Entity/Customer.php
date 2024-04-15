@@ -20,7 +20,6 @@ class Customer
      */
     private $id;
 
-
     /**
      * @ORM\Column(type="string", length=10)
      * @Assert\Choice({"private", "business"})
@@ -148,6 +147,9 @@ class Customer
 
     public function setPrivileges(?string $privileges): self
     {
+        if ($this->type !== 'business') {
+            throw new \LogicException('Only business customers can set type.:'.print_r($this, true).':privileges:'.$privileges.':');
+        }
         $this->privileges = $privileges;
         return $this;
     }
@@ -159,6 +161,9 @@ class Customer
 
     public function setDepartment(?string $department): self
     {
+        if ($this->type !== 'business') {
+            throw new \LogicException('Only business customers can set departments.');
+        }
         $this->department = $department;
         return $this;
     }

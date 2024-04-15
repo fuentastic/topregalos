@@ -16,29 +16,29 @@ class CustomerController extends AbstractController
    /**
      * @Route("/get-random-private-customer", methods={"GET"})
      */
-    public function getRandomPrivateCustomer(EntityManagerInterface $entityManager): Response
+    public function getRandomPrivateCustomer(EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
     {
-        $randomPrivateCustomer = $entityManager->getRepository(Customer::class)->findOneBy(['type' => 'private'], ['id' => 'ASC']);
+        $customer = $entityManager->getRepository(Customer::class)->findOneBy(['type' => 'private'], ['id' => 'ASC']);
 
-        if (!$randomPrivateCustomer) {
+        if (!$customer)
             return new Response('No private customer found', Response::HTTP_NOT_FOUND);
-        }
 
-        return new Response($randomPrivateCustomer);
+        $jsonContent = $serializer->serialize($customer, 'json');
+        return new Response($jsonContent, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
     /**
      * @Route("/get-random-business-customer", methods={"GET"})
      */
-    public function getRandomBusinessCustomer(EntityManagerInterface $entityManager): Response
+    public function getRandomBusinessCustomer(EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
     {
-        $randomBusinessCustomer = $entityManager->getRepository(Customer::class)->findOneBy(['type' => 'business'], ['id' => 'ASC']);
+        $customer = $entityManager->getRepository(Customer::class)->findOneBy(['type' => 'business'], ['id' => 'ASC']);
 
-        if (!$randomBusinessCustomer) {
+        if (!$customer)
             return new Response('No business customer found', Response::HTTP_NOT_FOUND);
-        }
 
-        return new Response($randomBusinessCustomer);
+        $jsonContent = $serializer->serialize($customer, 'json');
+        return new Response($jsonContent, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
     /**
@@ -99,12 +99,30 @@ class CustomerController extends AbstractController
         }
     }
 
+    private function getBusinessContent(Request $request) {
+        $dataString = $request->getContent();
+        $originalData = json_decode($dataString, true);
+
+        // Create a new array with 'type' as the first key
+        $data = ['type' => 'business'];
+
+        // Copy other elements from the original array to the new array
+        foreach ($originalData as $key => $value) {
+            // Skip 'type' to avoid overwriting it if it's already set in original data
+            if ($key !== 'type') {
+                $data[$key] = $value;
+            }
+        }
+
+        return json_encode($data);
+    }
+
     /**
      * @Route("/business-customer", methods={"POST"})
      */
     public function createBusinessCustomer(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
     {
-        $data = $request->getContent();
+        $data = $this->getBusinessContent($request);
         try {
             $customer = $serializer->deserialize($data, Customer::class, 'json');
             $customer->setType('business');
@@ -137,7 +155,7 @@ class CustomerController extends AbstractController
             return new Response('Customer not found', Response::HTTP_NOT_FOUND);
         }
 
-        $data = $request->getContent();
+        $data = $this->getBusinessContent($request);
         try {
             $serializer->deserialize($data, Customer::class, 'json', ['object_to_populate' => $existingCustomer]);
             $existingCustomer->setUpdatedAt(new \DateTime());
